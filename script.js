@@ -1,32 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    
     const totalPhotos = 52; 
     const startDate = new Date("2025-03-14T00:00:00");
+    let loadedPhotos = 0;
+    const initialLoad = 20;
     
-    const track = document.getElementById("photoCarousel");
+    const galleryGrid = document.getElementById("galleryGrid");
     const modal = document.getElementById("imageModal");
     const modalImg = document.getElementById("imgFull");
     const captionText = document.getElementById("caption");
     const closeModal = document.querySelector(".close-modal");
     const nav = document.querySelector('.navbar');
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
     
-    let currentIndex = 0;
+    function loadGalleryChunk(start, count) {
+        if (!galleryGrid) return;
 
-    
-    function loadGallery() {
-        if (!track) return;
-
-        for (let i = 1; i <= totalPhotos; i++) {
-            const card = document.createElement("div");
-            card.className = "photo-card-carousel";
+        for (let i = start; i < Math.min(start + count, totalPhotos + 1); i++) {
+            const item = document.createElement("div");
+            item.className = "photo-item";
             
             const img = document.createElement("img");
             img.src = `assets/img/photo${i}.jpg`;
             img.loading = "lazy";
             img.alt = `Nosso momento especial #${i}`;
 
-    
             img.onclick = function() {
                 if (modal && modalImg) {
                     modal.style.display = "flex";
@@ -36,54 +35,51 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
 
-         
             img.onerror = function() {
-                this.parentElement.remove();
+                this.parentElement.style.display = "none";
             };
 
-            card.appendChild(img);
-            track.appendChild(card);
-            
-            
-            const dotsContainer = document.getElementById("carouselDots");
-            if (dotsContainer && i <= 10) {
-                const dot = document.createElement("div");
-                dot.className = `dot ${i === 1 ? 'active' : ''}`;
-                dot.onclick = () => moveCarousel(i - 1);
-                dotsContainer.appendChild(dot);
-            }
+            item.appendChild(img);
+            galleryGrid.appendChild(item);
+            loadedPhotos++;
         }
     }
 
-    function moveCarousel(index) {
-        if (!track) return;
+    function loadGallery() {
+        loadGalleryChunk(1, initialLoad);
         
-        const dots = document.querySelectorAll(".dot");
-        const slides = document.querySelectorAll(".photo-card-carousel");
-        
-        if (index >= slides.length) index = 0;
-        if (index < 0) index = slides.length - 1;
-        
-        currentIndex = index;
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-        
-        
-        dots.forEach((d, i) => {
-            d.classList.toggle("active", i === currentIndex);
+        let scrolling = false;
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 && loadedPhotos < totalPhotos && !scrolling) {
+                scrolling = true;
+                setTimeout(() => {
+                    loadGalleryChunk(loadedPhotos + 1, 10);
+                    scrolling = false;
+                }, 300);
+            }
         });
     }
 
-  
-    const nextBtn = document.getElementById("nextBtn");
-    const prevBtn = document.getElementById("prevBtn");
+    function toggleMenu() {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    }
 
-    if (nextBtn) nextBtn.onclick = () => moveCarousel(currentIndex + 1);
-    if (prevBtn) prevBtn.onclick = () => moveCarousel(currentIndex - 1);
+    if (hamburger) hamburger.onclick = toggleMenu;
 
-   
-    setInterval(() => moveCarousel(currentIndex + 1), 5000);
+    const menuLinks = document.querySelectorAll('.nav-links a');
+    menuLinks.forEach(link => {
+        link.onclick = () => {
+            if (window.innerWidth <= 768) toggleMenu();
+        };
+    });
 
-  
+    if (navLinks) {
+        navLinks.onclick = (e) => {
+            if (e.target === navLinks && window.innerWidth <= 768) toggleMenu();
+        };
+    }
+
     function fecharModal() {
         if (modal) {
             modal.style.display = "none";
@@ -92,17 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (closeModal) closeModal.onclick = fecharModal;
-    if (modal) {
-        modal.onclick = (e) => {
-            if (e.target === modal) fecharModal();
-        };
-    }
+    if (modal) modal.onclick = (e) => { if (e.target === modal) fecharModal(); };
 
-    
     function updateCounter() {
         const now = new Date();
         const diff = now - startDate;
-
         if (diff < 0) return;
 
         const anos = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
@@ -110,67 +100,64 @@ document.addEventListener("DOMContentLoaded", () => {
         const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutos = Math.floor((diff / (1000 * 60)) % 60);
 
-        if (document.getElementById("anos")) {
-            document.getElementById("anos").innerText = anos;
-            document.getElementById("dias").innerText = dias;
-            document.getElementById("horas").innerText = horas;
-            document.getElementById("minutos").innerText = minutos;
-        }
+        document.getElementById("anos").textContent = anos;
+        document.getElementById("dias").textContent = dias;
+        document.getElementById("horas").textContent = horas;
+        document.getElementById("minutos").textContent = minutos;
     }
 
-    
+    let ticking = false;
     window.addEventListener('scroll', () => {
-        if (nav) {
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                if (nav) {
+                    nav.classList.toggle('scrolled', window.scrollY > 50);
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
     });
 
+    let lastHeartTime = 0;
     function createHeart() {
-        if (document.hidden) return;
+        const now = Date.now();
+        if (now - lastHeartTime < 3000 || document.hidden) return;
+        lastHeartTime = now;
+        
         const heart = document.createElement("div");
         heart.innerHTML = "❤️";
-        heart.style.position = "fixed";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.top = "-20px";
-        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
-        heart.style.opacity = Math.random();
-        heart.style.pointerEvents = "none";
-        heart.style.zIndex = "9999";
-        
-        const duration = Math.random() * 3 + 3;
-        heart.style.transition = `transform ${duration}s linear, opacity ${duration}s`;
-        
+        heart.style.cssText = `
+            position: fixed; left: ${Math.random()*100}vw; top: -20px;
+            font-size: ${12 + Math.random()*8}px; opacity: 0.7; color: var(--primary);
+            pointer-events: none; z-index: 9999;
+            animation: heartFloat 5s linear forwards;
+        `;
         document.body.appendChild(heart);
-
-        setTimeout(() => {
-            heart.style.transform = `translateY(105vh) rotate(${Math.random() * 360}deg)`;
-        }, 100);
-
-        setTimeout(() => heart.remove(), duration * 1000);
+        setTimeout(() => heart.remove(), 5000);
     }
 
-    
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes heartFloat {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+
     function setupMusic() {
         const spotifyIframe = document.getElementById('spotifyIframe');
-        
-
-        const musicID = '6rqHmW9RGbiHd61oSGvC7Y'; 
-
         if (spotifyIframe) {
-     
-            spotifyIframe.src = `https://open.spotify.com/embed/track/${musicID}?utm_source=generator&theme=0`;
+            spotifyIframe.src = 'https://open.spotify.com/embed/playlist/37i9dQZF1DX30CzVqK3ucK?utm_source=generator&theme=0';
+            spotifyIframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
         }
     }
 
-   
     loadGallery();
     setupMusic();
     updateCounter();
     
-    setInterval(updateCounter, 1000);
-    setInterval(createHeart, 500);
+    setInterval(updateCounter, 60000);
+    setInterval(createHeart, 5000);
 });
