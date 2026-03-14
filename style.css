@@ -205,6 +205,92 @@ body {
     transform: scale(1.1);
 }
 
+/* --- ESTILO DO CARROSSEL --- */
+.carousel-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.carousel-window {
+    width: 100%;
+    overflow: hidden; /* Esconde as fotos que estão fora do foco */
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.photo-card-carousel {
+    min-width: 100%; /* Mostra uma foto por vez. Mude para 33.33% para mostrar 3 */
+    height: 500px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.photo-card-carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Botões de navegação */
+.carousel-btn {
+    background: var(--glass);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.carousel-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ccc;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: var(--primary);
+    transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+    .photo-card-carousel { height: 350px; }
+    .carousel-btn { display: none; } /* No celular é melhor usar o deslize ou botões menores */
+}
+
 /* PLAYLIST */
 .music-section {
     background: #fff0f3;
