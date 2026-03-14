@@ -21,7 +21,7 @@ body {
     scroll-behavior: smooth;
 }
 
-/* NAVEGAÇÃO PROFISSIONAL */
+/* NAVEGAÇÃO*/
 .navbar {
     position: fixed;
     top: 0; 
@@ -30,12 +30,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 3000; /* Acima de tudo, inclusive do modal */
-    transition: all 0.4s ease; /* Transição suave ao rolar */
-    background: transparent; /* Começa transparente */
+    z-index: 3000; 
+    transition: all 0.4s ease; 
+    background: transparent;
 }
 
-/* Quando o JS adicionar a classe .scrolled (ao rolar a página) */
+
 .navbar.scrolled {
     background: rgba(255, 255, 255, 0.95);
     padding: 12px 50px;
@@ -47,12 +47,12 @@ body {
 .navbar .logo {
     font-family: 'Dancing Script';
     font-size: 2rem;
-    color: white; /* Branco no topo para destacar na foto */
+    color: white; 
     transition: 0.3s;
 }
 
 .navbar.scrolled .logo {
-    color: var(--dark); /* Escuro quando rolar */
+    color: var(--dark); 
 }
 
 /* LINKS */
@@ -64,15 +64,15 @@ body {
 
 .nav-links a { 
     text-decoration: none; 
-    color: white; /* Branco no topo */
+    color: white; 
     font-weight: 600;
     font-size: 0.95rem;
     transition: 0.3s;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Sombra leve para ler sobre a foto */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
 
 .navbar.scrolled .nav-links a {
-    color: var(--dark); /* Escuro quando rolar */
+    color: var(--dark); 
     text-shadow: none;
 }
 
@@ -88,7 +88,7 @@ body {
     .nav-links a { font-size: 0.8rem; }
 }
 
-/* HERO SECTION */
+/* HERO */
 .hero {
     height: 100vh;
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
@@ -115,7 +115,6 @@ body {
     font-weight: 300;
 }
 
-/* CONTADOR (CARD GLASS) */
 .counter-container {
     padding: 0 20px;
     margin-top: -100px;
@@ -217,7 +216,7 @@ body {
 
 .carousel-window {
     width: 100%;
-    overflow: hidden; /* Esconde as fotos que estão fora do foco */
+    overflow: hidden; 
     border-radius: 20px;
     box-shadow: var(--shadow);
 }
@@ -228,7 +227,7 @@ body {
 }
 
 .photo-card-carousel {
-    min-width: 100%; /* Mostra uma foto por vez. Mude para 33.33% para mostrar 3 */
+    min-width: 100%; 
     height: 500px;
     cursor: pointer;
     flex-shrink: 0;
@@ -288,7 +287,7 @@ body {
 
 @media (max-width: 768px) {
     .photo-card-carousel { height: 350px; }
-    .carousel-btn { display: none; } /* No celular é melhor usar o deslize ou botões menores */
+    .carousel-btn { display: none; } 
 }
 
 /* PLAYLIST */
@@ -327,7 +326,7 @@ footer {
     .glass-card { padding: 30px 20px; }
 }
 
-/* ... (Mantenha o CSS anterior e adicione/atualize estes pontos abaixo) ... */
+
 
 .video-section {
     background-color: #f0f2f5;
@@ -364,10 +363,10 @@ footer {
 }
 
 .music-section {
-    background: #fff; /* Removi o fundo rosa para ficar mais clean */
+    background: #fff; 
 }
 
-/* Ajuste do Spotify para carregar melhor */
+
 .spotify-container {
     max-width: 700px;
     margin: 0 auto;

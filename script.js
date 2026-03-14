@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- 1. CONFIGURAÇÕES E ELEMENTOS ---
+    
     const totalPhotos = 52; 
     const startDate = new Date("2025-03-14T00:00:00");
     
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let currentIndex = 0;
 
-    // --- 2. LÓGICA DA GALERIA (CARROSSEL) ---
+    
     function loadGallery() {
         if (!track) return;
 
@@ -26,17 +26,17 @@ document.addEventListener("DOMContentLoaded", () => {
             img.loading = "lazy";
             img.alt = `Nosso momento especial #${i}`;
 
-            // Abrir Modal de Zoom ao clicar
+    
             img.onclick = function() {
                 if (modal && modalImg) {
                     modal.style.display = "flex";
                     modalImg.src = this.src;
                     captionText.innerHTML = "Cada detalhe ao seu lado é perfeito. ❤️";
-                    document.body.style.overflow = "hidden"; // Trava o scroll
+                    document.body.style.overflow = "hidden"; 
                 }
             };
 
-            // Se a imagem não existir, remove o card para não ficar vazio
+         
             img.onerror = function() {
                 this.parentElement.remove();
             };
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.appendChild(img);
             track.appendChild(card);
             
-            // Criar pontinhos de navegação (limitado aos 10 primeiros para não poluir)
+            
             const dotsContainer = document.getElementById("carouselDots");
             if (dotsContainer && i <= 10) {
                 const dot = document.createElement("div");
@@ -67,23 +67,23 @@ document.addEventListener("DOMContentLoaded", () => {
         currentIndex = index;
         track.style.transform = `translateX(-${currentIndex * 100}%)`;
         
-        // Atualiza os pontinhos ativos
+        
         dots.forEach((d, i) => {
             d.classList.toggle("active", i === currentIndex);
         });
     }
 
-    // Botões do Carrossel
+  
     const nextBtn = document.getElementById("nextBtn");
     const prevBtn = document.getElementById("prevBtn");
 
     if (nextBtn) nextBtn.onclick = () => moveCarousel(currentIndex + 1);
     if (prevBtn) prevBtn.onclick = () => moveCarousel(currentIndex - 1);
 
-    // Mudar foto automaticamente a cada 5 segundos
+   
     setInterval(() => moveCarousel(currentIndex + 1), 5000);
 
-    // --- 3. LÓGICA DO MODAL (FECHAR) ---
+  
     function fecharModal() {
         if (modal) {
             modal.style.display = "none";
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // --- 4. LÓGICA DO CONTADOR ---
+    
     function updateCounter() {
         const now = new Date();
         const diff = now - startDate;
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- 5. NAVBAR E EFEITOS VISUAIS ---
+    
     window.addEventListener('scroll', () => {
         if (nav) {
             if (window.scrollY > 50) {
@@ -153,20 +153,20 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => heart.remove(), duration * 1000);
     }
 
-    // --- 6. LÓGICA DE MÚSICA (SPOTIFY) ---
+    
     function setupMusic() {
         const spotifyIframe = document.getElementById('spotifyIframe');
         
-        // Substitua pelo ID da sua playlist ou música favorita
+
         const musicID = '6rqHmW9RGbiHd61oSGvC7Y'; 
 
         if (spotifyIframe) {
-            // URL de Embed oficial corrigida
+     
             spotifyIframe.src = `https://open.spotify.com/embed/track/${musicID}?utm_source=generator&theme=0`;
         }
     }
 
-    // --- 7. INICIALIZAÇÃO GERAL ---
+   
     loadGallery();
     setupMusic();
     updateCounter();
